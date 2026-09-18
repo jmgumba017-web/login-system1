@@ -15,6 +15,8 @@ app.use(cors());
 // );
 app.use(express.json());
 
+
+
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
@@ -76,7 +78,7 @@ app.post("/api/login", async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, name: user.name, email: user.email },
-      process.env.JWT_SECRET,
+      process.env.JWT_SECRET, 
       { expiresIn: "1h" },
     );
 
@@ -122,10 +124,11 @@ mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("MongoDB connected.");
-    app.listen(PORT, () => {
+    app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
     console.error("MongoDB connection failed:", error);
+    process.exit(1);
   });
